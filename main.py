@@ -21,6 +21,8 @@ logger = setup_logger("telethon")
 
 channels_factories = {
     config["Channels"]["one_piece"]: OnePiece(config["Channels"]["one_piece"]),
+    config["Channels"]["young_sheldon"]: OnePiece(config["Channels"]["young_sheldon"]),
+    config["Channels"]["zuby"]: OnePiece(config["Channels"]["zuby"]),
 }
 
 
