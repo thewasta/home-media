@@ -48,8 +48,8 @@ async def get_dialogs():
 
 def disk_full():
     hdd = psutil.disk_usage(config['Telegram']['DISK'])
-    if hdd.percent >= 95:
-        raise "Disk usage is over 95%"
+    if hdd.percent >= disk_usage:
+        raise f"Disk usage is over {disk_usage}%"
 
 
 async def file_system_notification() -> bool:
