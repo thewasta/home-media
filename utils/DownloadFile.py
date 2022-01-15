@@ -58,11 +58,37 @@ class DownloadFile:
         media_id = message.media.document.id
         peer_channel = message.peer_id.channel_id
         json_data, file = self.__read_json_file(peer_channel)
+        # [info] after first execution, remove this code
+        if self.__old_downloads(media_id):
+            json_data.append({
+                "id": media_id,
+                "status": "finished",
+                "retry": 1
+            })
+            self.__save_finished(json_data, media_id, peer_channel)
+            return True
         result = False
         if len(json_data) > 0:
             for i in json_data:
                 if str(i["id"]) == str(media_id) and i["status"] == "finished":
                     result = True
+        return result
+
+    # noinspection PyMethodMayBeStatic
+    def __old_downloads(self, media_id):
+        print(media_id)
+        result = False
+        if not Path("storage/data/downloads.txt").exists():
+            raise "Please copy old downloads"
+        try:
+            with open("storage/data/downloads.txt", "r") as temp_file:
+                data_file = temp_file.readlines()
+                for line in data_file:
+                    if str(media_id) in line:
+                        result = True
+                        break
+        except:
+            pass
         return result
 
     # noinspection PyMethodMayBeStatic
