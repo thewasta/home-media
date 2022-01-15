@@ -3,7 +3,7 @@ from pathlib import Path
 import json
 
 
-class DownloadFile:
+class MetadataDownload:
     # noinspection PyMethodMayBeStatic
     def start_download(self, message: Message):
         peer_channel = message.peer_id.channel_id

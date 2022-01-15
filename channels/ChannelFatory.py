@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
-from utils.DownloadFile import DownloadFile
+from utils.MetadataDownload import MetadataDownload
 from telethon.tl.custom.message import Message
 
 
-class ChannelFactory(ABC, DownloadFile):
+class ChannelFactory(ABC, MetadataDownload):
     @abstractmethod
     async def download_file(self, client, message, abs_path: str):
         """
