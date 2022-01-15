@@ -76,7 +76,6 @@ class DownloadFile:
 
     # noinspection PyMethodMayBeStatic
     def __old_downloads(self, media_id):
-        print(media_id)
         result = False
         if not Path("storage/data/downloads.txt").exists():
             raise "Please copy old downloads"
