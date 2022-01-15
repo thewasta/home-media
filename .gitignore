@@ -1,5 +1,6 @@
 .idea
 venv
-
+channels/__pycache__/
+utils/__pycache__/
 config.ini
 *.session
