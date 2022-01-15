@@ -1,3 +1,4 @@
+#!/usr/bin/env python3.8
 import asyncio
 import configparser
 from pathlib import Path
