@@ -14,7 +14,7 @@ class OnePiece(ChannelFactory):
         ""
 
     async def download_file(self, client: TelegramClient, message: Message, abs_path):
-        if not self.already_downloaded(message, abs_path) and not self.should_ignore(message):
+        if not self.already_downloaded(message) and not self.should_ignore(message):
             file_type = FileMimeType.get_mime(message.media.document.mime_type)
             if "#" in message.message:
                 print(message.message)
