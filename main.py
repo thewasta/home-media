@@ -40,6 +40,12 @@ async def get_dialogs():
             file.close()
 
 
+def disk_full():
+    hdd = psutil.disk_usage(config['Telegram']['DISK'])
+    if hdd.percent >= 95:
+        raise "Disk usage is over 95%"
+
+
 async def file_system_notification() -> bool:
     hdd = psutil.disk_usage(config['Telegram']['DISK'])
     result = False
@@ -59,9 +65,11 @@ async def file_system_notification() -> bool:
 async def main():
     for channel, channel_id in channels_videos.items():
         peer_channel = PeerChannel(channel_id=int(channel_id))
+        # todo REMOVE LIMIT WHEN READY TO PRODUCTION
         async for message in client.iter_messages(entity=peer_channel, limit=4):
-            notification = await file_system_notification()
-            if is_media_message(message) and not notification:
+            disk_full()
+            await file_system_notification()
+            if is_media_message(message):
                 factory: ChannelFactory = channels_factories[channel_id]
                 await factory.download_file(client, message, config["Telegram"]["PATH"])
 
