@@ -22,15 +22,19 @@ class OnePiece(ChannelFactory):
     async def download_file(self, client: TelegramClient, message: Message, abs_path):
         if not self.already_downloaded(message) and not self.must_ignore(message):
             path = self.get_path(message)
-            with open(path, "wb") as out:
-                self.start_download(message)
-                # await download_file(client, message.media.document, out)
-                self.download_finished(message)
+            # if path:
+            #     with open(path, "wb") as out:
+            #         self.start_download(message)
+            #         if config["Telegram"]["APP_DEBUG"] != "true":
+            #             print("DOWNLOAD","PIECE")
+            #             exit()
+            #             await download_file(client, message.media.document, out)
+            #         self.download_finished(message)
 
     def must_ignore(self, message) -> bool:
         return "3D" in message.message or "Película" in message.message
 
-    def get_path(self, message: Message) -> Path:
+    def get_path(self, message: Message):
         file_type = FileMimeType.get_mime(message.media.document.mime_type)
         main_folder_path = PurePath(str(config['Telegram']['PATH']), self.parent, "TV", self.show)
         if "Cap" in message.message:

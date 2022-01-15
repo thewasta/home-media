@@ -16,6 +16,7 @@ class DownloadFile:
         for i in json_data:
             if str(i["id"]) == str(media_id):
                 i["status"] = "finished"
+                break
         self.__save_data_to_file(json_data, peer_channel)
 
     # noinspection PyMethodMayBeStatic
@@ -26,6 +27,7 @@ class DownloadFile:
                 if str(i["id"]) == str(media_id):
                     i["retry"] = int(i["retry"]) + 1
                     media_on_json_data = True
+                    break
         else:
             media_on_json_data = True
             json_data.append({
@@ -72,6 +74,7 @@ class DownloadFile:
             for i in json_data:
                 if str(i["id"]) == str(media_id) and i["status"] == "finished":
                     result = True
+                    break
         return result
 
     # noinspection PyMethodMayBeStatic
@@ -79,15 +82,12 @@ class DownloadFile:
         result = False
         if not Path("storage/data/downloads.txt").exists():
             raise "Please copy old downloads"
-        try:
-            with open("storage/data/downloads.txt", "r") as temp_file:
-                data_file = temp_file.readlines()
-                for line in data_file:
-                    if str(media_id) in line:
-                        result = True
-                        break
-        except:
-            pass
+        with open("storage/data/downloads.txt", "r") as temp_file:
+            data_file = temp_file.readlines()
+            for line in data_file:
+                if str(media_id) in line:
+                    result = True
+                    break
         return result
 
     # noinspection PyMethodMayBeStatic
@@ -100,3 +100,4 @@ class DownloadFile:
         file = open(file_path)
         data = json.load(file)
         return data, file
+

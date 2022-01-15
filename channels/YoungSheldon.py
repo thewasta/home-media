@@ -2,6 +2,7 @@ import re
 from pathlib import Path, PurePath
 from telethon.tl.custom import Message
 from utils.FileMimeType import FileMimeType
+from utils.FastTelethon import download_file
 
 from channels.ChannelFatory import ChannelFactory
 import configparser
@@ -19,10 +20,14 @@ class YoungSheldon(ChannelFactory):
     async def download_file(self, client, message, abs_path: str):
         if not self.already_downloaded(message) and not self.must_ignore(message):
             path = self.get_path(message)
-            with open(path, "wb") as out:
-                self.start_download(message)
-                # await download_file(client, message.media.document, out)
-                self.download_finished(message)
+            # if path:
+            #     with open(path, "wb") as out:
+            #         self.start_download(message)
+            #         if config["Telegram"]["APP_DEBUG"] != "true":
+            #             print("DOWNLOAD", "SHELDON")
+            #             exit()
+            #             await download_file(client, message.media.document, out)
+            #         self.download_finished(message)
 
     def make_directory(self, abs_path: Path):
         abs_path.parent.mkdir(parents=True, exist_ok=True)
@@ -30,7 +35,7 @@ class YoungSheldon(ChannelFactory):
     def must_ignore(self, message: Message) -> bool:
         """"""
 
-    def get_path(self, message: Message) -> Path:
+    def get_path(self, message: Message):
         dialog_message = message.message
         file_type = FileMimeType.get_mime(message.media.document.mime_type)
         main_folder_path = PurePath(str(config['Telegram']['PATH']), self.parent, self.show)

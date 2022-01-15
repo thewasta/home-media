@@ -31,5 +31,5 @@ class ChannelFactory(ABC, DownloadFile):
         """
 
     @abstractmethod
-    def get_path(self, message: Message) -> Path:
+    def get_path(self, message: Message):
         """"""

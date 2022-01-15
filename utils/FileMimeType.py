@@ -6,6 +6,6 @@ class FileMimeType:
             "x-msvideo": "avi"
         }
         split_mime = mime.split("/")
-        if hasattr(formats, split_mime[1]):
+        if split_mime[1] in formats:
             return formats[split_mime[1]]
         return split_mime[1]

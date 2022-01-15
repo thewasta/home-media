@@ -6,6 +6,8 @@ from telethon.tl.types import PeerChannel
 from utils.Logger import setup_logger
 from channels.ChannelFatory import ChannelFactory
 from channels.OnePiece import OnePiece
+from channels.YoungSheldon import YoungSheldon
+from channels.DisneyPalomitas import DisneyPalomitas
 import psutil
 
 config = configparser.ConfigParser()
@@ -21,8 +23,9 @@ logger = setup_logger("telethon")
 
 channels_factories = {
     config["Channels"]["one_piece"]: OnePiece(config["Channels"]["one_piece"]),
-    config["Channels"]["young_sheldon"]: OnePiece(config["Channels"]["young_sheldon"]),
-    config["Channels"]["zuby"]: OnePiece(config["Channels"]["zuby"]),
+    config["Channels"]["young_sheldon"]: YoungSheldon(config["Channels"]["young_sheldon"]),
+    config["Channels"]["disney_palomitas"]: DisneyPalomitas(config["Channels"]["disney_palomitas"]),
+    config["Channels"]["zuby_palomitas"]: DisneyPalomitas(config["Channels"]["zuby_palomitas"]),
 }
 
 
@@ -68,7 +71,7 @@ async def main():
     for channel, channel_id in channels_videos.items():
         peer_channel = PeerChannel(channel_id=int(channel_id))
         # todo REMOVE LIMIT WHEN READY TO PRODUCTION
-        async for message in client.iter_messages(entity=peer_channel, limit=4):
+        async for message in client.iter_messages(entity=peer_channel):
             disk_full()
             await file_system_notification()
             if is_media_message(message):
