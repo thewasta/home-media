@@ -24,8 +24,12 @@ class ChannelFactory(ABC, DownloadFile):
         """
 
     @abstractmethod
-    def should_ignore(self, message: Message) -> bool:
+    def must_ignore(self, message: Message) -> bool:
         """
         :param message:
         :return:
         """
+
+    @abstractmethod
+    def get_path(self, message: Message) -> Path:
+        """"""
