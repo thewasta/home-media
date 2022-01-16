@@ -61,14 +61,14 @@ class MetadataDownload:
         peer_channel = message.peer_id.channel_id
         json_data, file = self.__read_json_file(peer_channel)
         # [info] after first execution, remove this code
-        if self.__old_downloads(media_id):
-            json_data.append({
-                "id": media_id,
-                "status": "finished",
-                "retry": 1
-            })
-            self.__save_finished(json_data, media_id, peer_channel)
-            return True
+        # if self.__old_downloads(media_id):
+        #     json_data.append({
+        #         "id": media_id,
+        #         "status": "finished",
+        #         "retry": 1
+        #     })
+        #     self.__save_finished(json_data, media_id, peer_channel)
+        #     return True
         result = False
         if len(json_data) > 0:
             for i in json_data:

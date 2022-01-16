@@ -29,15 +29,15 @@ class DisneyPalomitas(ChannelFactory):
     async def download_file(self, client, message, abs_path: str):
         if not self.already_downloaded(message) and not self.must_ignore(message):
             path = self.get_path(message)
-            # if path:
-            #     with open(path, "wb") as out:
-            #         if config["Telegram"]["APP_DEBUG"] != "true":
-            #             self.start_download(message)
-            #             self.file = path
-            #             logger.info("Inicio de descarga de archivo")
-            #             await download_file(client, message.media.document, out, progress_callback=self.progress)
-            #             logger.info("Finalización de descarga de archivo")
-            #         self.download_finished(message)
+            if path:
+                with open(path, "wb") as out:
+                    if config["Telegram"]["APP_DEBUG"] != "true":
+                        self.start_download(message)
+                        self.file = path
+                        logger.info("Inicio de descarga de archivo")
+                        await download_file(client, message.media.document, out, progress_callback=self.progress)
+                        logger.info("Finalización de descarga de archivo")
+                    self.download_finished(message)
 
     def make_directory(self, abs_path: Path):
         abs_path.parent.mkdir(parents=True, exist_ok=True)
