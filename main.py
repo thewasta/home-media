@@ -9,6 +9,7 @@ from channels.ChannelFatory import ChannelFactory
 from channels.OnePiece import OnePiece
 from channels.YoungSheldon import YoungSheldon
 from channels.DisneyPalomitas import DisneyPalomitas
+from utils import bytes_to
 import psutil
 
 config = configparser.ConfigParser()
@@ -20,19 +21,14 @@ channels_videos = config["Channels"]
 disk_usage = int(config['Telegram']['DISK_USAGE'])
 
 client = TelegramClient("session", api_id, api_hash)
-logger = setup_logger("telethon")
+logger = setup_logger("main")
 
 channels_factories = {
     config["Channels"]["one_piece"]: OnePiece(config["Channels"]["one_piece"]),
-    config["Channels"]["young_sheldon"]: YoungSheldon(config["Channels"]["young_sheldon"]),
-    config["Channels"]["disney_palomitas"]: DisneyPalomitas(config["Channels"]["disney_palomitas"]),
-    config["Channels"]["zuby_palomitas"]: DisneyPalomitas(config["Channels"]["zuby_palomitas"]),
+    # config["Channels"]["young_sheldon"]: YoungSheldon(config["Channels"]["young_sheldon"]),
+    # config["Channels"]["disney_palomitas"]: DisneyPalomitas(config["Channels"]["disney_palomitas"]),
+    # config["Channels"]["zuby_palomitas"]: DisneyPalomitas(config["Channels"]["zuby_palomitas"]),
 }
-
-
-def bytes_to(bytes, to, bsize=1024):
-    a = {'k': 1, 'm': 2, 'g': 3, 't': 4, 'p': 5, 'e': 6}
-    return format(bytes / (bsize ** a[to]), ".2f")
 
 
 def check_file_exist(abs_path):
@@ -72,10 +68,14 @@ async def main():
     for channel, channel_id in channels_videos.items():
         peer_channel = PeerChannel(channel_id=int(channel_id))
         # todo REMOVE LIMIT WHEN READY TO PRODUCTION
+        """
+        :param message Message
+        """
         async for message in client.iter_messages(entity=peer_channel):
             disk_full()
             await file_system_notification()
             if is_media_message(message):
+                logger.info(f"Canal: {peer_channel.channel_id} Mensaje: {message.media.document.id}")
                 factory: ChannelFactory = channels_factories[channel_id]
                 await factory.download_file(client, message, config["Telegram"]["PATH"])
 
