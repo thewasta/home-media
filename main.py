@@ -41,10 +41,15 @@ def check_file_exist(abs_path):
 
 
 async def get_dialogs():
+    import json
+    chats = []
     async for chat in client.iter_dialogs():
-        with open("storage/data.txt", "a") as file:
-            file.write(f'{chat.name} has ID {chat.id}')
-            file.close()
+        chats.append({
+            "name": re.sub("[^\w ]", "", chat.name),
+            "id": str(chat.id)
+        })
+    with open("storage/data.json", "w") as file:
+        json.dump(chats, file)
 
 
 def disk_full():
