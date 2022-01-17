@@ -1,10 +1,7 @@
 import re
 from pathlib import Path, PurePath
 from utils.FileMimeType import FileMimeType
-from utils.FastTelethon import download_file
 from telethon.tl.custom import Message
-from utils import bytes_to
-from utils import logger
 from channels.ChannelFatory import ChannelFactory
 import configparser
 
@@ -18,29 +15,6 @@ class DisneyPalomitas(ChannelFactory):
         self.show = ""
         self.parent = "TV Shows"
         self.file = ""
-
-    def progress(self, current, total):
-        current_m = bytes_to(current, "m")
-        total_b = bytes_to(total, "m")
-        path = "/".join(str(self.file).split("/")[-3:])
-        logger.info("Download total: {}% {} mb/{} mb {}"
-                    .format(int((current / total) * 100), current_m, total_b, path))
-
-    async def download_file(self, client, message, abs_path: str):
-        if not self.already_downloaded(message) and not self.must_ignore(message):
-            path = self.get_path(message)
-            if path:
-                with open(path, "wb") as out:
-                    if config["Telegram"]["APP_DEBUG"] != "true":
-                        self.start_download(message)
-                        self.file = path
-                        logger.info("Inicio de descarga de archivo")
-                        await download_file(client, message.media.document, out, progress_callback=self.progress)
-                        logger.info("Finalización de descarga de archivo")
-                    self.download_finished(message)
-
-    def make_directory(self, abs_path: Path):
-        abs_path.parent.mkdir(parents=True, exist_ok=True)
 
     def must_ignore(self, message: Message) -> bool:
         if not hasattr(message.media.document.attributes[0], "file_name"):
@@ -71,7 +45,6 @@ class DisneyPalomitas(ChannelFactory):
             chapter = re.findall("\d{1,2}", message_file_name)[1]
             file_name = f"{self.show} S{season}E{chapter}.{file_type}"
             abs_path = Path(PurePath(main_folder_path, file_name))
-            self.make_directory(abs_path)
             return Path(abs_path)
 
     def __rename_show(self):

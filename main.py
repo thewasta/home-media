@@ -10,6 +10,7 @@ from channels.OnePiece import OnePiece
 from channels.YoungSheldon import YoungSheldon
 from channels.DisneyPalomitas import DisneyPalomitas
 from utils import bytes_to
+from utils.Download import Download
 import psutil
 
 config = configparser.ConfigParser()
@@ -65,6 +66,7 @@ async def file_system_notification() -> bool:
 
 
 async def main():
+    download = Download()
     for channel, channel_id in channels_videos.items():
         peer_channel = PeerChannel(channel_id=int(channel_id))
         # todo REMOVE LIMIT WHEN READY TO PRODUCTION
@@ -77,7 +79,10 @@ async def main():
             if is_media_message(message):
                 logger.info(f"Canal: {peer_channel.channel_id} Mensaje: {message.media.document.id}")
                 factory: ChannelFactory = channels_factories[channel_id]
-                await factory.download_file(client, message, config["Telegram"]["PATH"])
+                factory.must_ignore(message)
+                path = factory.get_path(message)
+                if path and not factory.must_ignore(message):
+                    await download.download_file(client, message, path)
 
 
 def is_media_message(message):
