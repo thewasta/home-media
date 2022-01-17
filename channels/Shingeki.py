@@ -26,10 +26,19 @@ class Shingeki(ChannelFactory):
             main_folder_path = PurePath(str(config['Telegram']['PATH']), self.parent, "TV", self.show)
             season = message.message.split(" ")[0].replace("T", "S0")
             chapter = re.search("(?<=ulo)(.*)(\d){1,2}", message.message).group().replace(" ", "")
-            chapter = "0" + chapter if int(chapter) < 10 else chapter
             if "parte" in message.message:
-                file_name = f"{self.show} {season}E{chapter}- part 2.{file_type}"
+                episode = 75 + int(chapter)
+                file_name = f"{self.show} episode {episode}.{file_type}"
+            elif "4" in season and "parte" not in message.message:
+                episode = 59 + int(chapter)
+                file_name = f"{self.show} episode {episode}.{file_type}"
+            elif "3" in season:
+                episode = 37 + int(chapter)
+                file_name = f"{self.show} episode {episode}.{file_type}"
+            elif "2" in season:
+                episode = 26 + int(chapter)
+                file_name = f"{self.show} episode {episode}.{file_type}"
             else:
-                file_name = f"{self.show} - {season}E{chapter}.{file_type}"
+                file_name = f"{self.show} episode {chapter}.{file_type}"
             abs_path = Path(PurePath(main_folder_path, file_name))
             return Path(abs_path)
