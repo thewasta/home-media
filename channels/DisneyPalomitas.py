@@ -1,17 +1,18 @@
+import configparser
 import re
 from pathlib import Path, PurePath
-from utils.FileMimeType import FileMimeType
+
 from telethon.tl.custom import Message
+
 from channels.ChannelFatory import ChannelFactory
-import configparser
+from utils.FileMimeType import FileMimeType
 
 config = configparser.ConfigParser()
 config.read("config.ini")
 
 
 class DisneyPalomitas(ChannelFactory):
-    def __init__(self, channel_id):
-        self.channel_id = channel_id
+    def __init__(self):
         self.show = ""
         self.parent = "TV Shows"
         self.file = ""

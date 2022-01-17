@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 from telethon.tl.custom.message import Message
 
 

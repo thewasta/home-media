@@ -1,16 +1,17 @@
-from channels.ChannelFatory import ChannelFactory
-from pathlib import Path, PurePath
-from telethon.tl.custom.message import Message
-from utils.FileMimeType import FileMimeType
 import configparser
+from pathlib import Path, PurePath
+
+from telethon.tl.custom.message import Message
+
+from channels.ChannelFatory import ChannelFactory
+from utils.FileMimeType import FileMimeType
 
 config = configparser.ConfigParser()
 config.read("config.ini")
 
 
 class OnePiece(ChannelFactory):
-    def __init__(self, channel_id):
-        self.channel_id = channel_id
+    def __init__(self):
         self.show = "One Piece"
         self.parent = "Anime"
         self.file = ""
@@ -26,6 +27,6 @@ class OnePiece(ChannelFactory):
                 chapter = message.message.split(" ")[0]
                 chapter = chapter.replace("#", "")
                 chapter = chapter.replace("Cap", "")
-                file_name = f"One Piece S01E{chapter}.{file_type}"
+                file_name = f"{self.show} S01E{chapter}.{file_type}"
                 abs_path = Path(PurePath(main_folder_path, file_name))
                 return Path(abs_path)
