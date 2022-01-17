@@ -29,10 +29,11 @@ client = TelegramClient("session", api_id, api_hash)
 logger = setup_logger("main")
 
 channels_factories = {
-    config["Channels"]["one_piece"]: OnePiece(config["Channels"]["one_piece"]),
-    config["Channels"]["young_sheldon"]: YoungSheldon(config["Channels"]["young_sheldon"]),
-    config["Channels"]["disney_palomitas"]: DisneyPalomitas(config["Channels"]["disney_palomitas"]),
-    config["Channels"]["zuby_palomitas"]: DisneyPalomitas(config["Channels"]["zuby_palomitas"]),
+    config["Channels"]["one_piece"]: OnePiece(),
+    config["Channels"]["young_sheldon"]: YoungSheldon(),
+    config["Channels"]["disney_palomitas"]: DisneyPalomitas(),
+    config["Channels"]["zuby_palomitas"]: DisneyPalomitas(),
+    config["Channels"]["shingeki"]: Shingeki(),
 }
 
 
