@@ -2,16 +2,18 @@
 import asyncio
 import configparser
 from pathlib import Path
+
+import psutil
 from telethon.sync import TelegramClient
 from telethon.tl.types import PeerChannel
-from utils.Logger import setup_logger
+
 from channels.ChannelFatory import ChannelFactory
+from channels.DisneyPalomitas import DisneyPalomitas
 from channels.OnePiece import OnePiece
 from channels.YoungSheldon import YoungSheldon
-from channels.DisneyPalomitas import DisneyPalomitas
 from utils import bytes_to
 from utils.Download import Download
-import psutil
+from utils.Logger import setup_logger
 
 config = configparser.ConfigParser()
 config.read("config.ini")
@@ -77,12 +79,13 @@ async def main():
             disk_full()
             await file_system_notification()
             if is_media_message(message):
-                logger.info(f"Canal: {peer_channel.channel_id} Mensaje: {message.media.document.id}")
                 factory: ChannelFactory = channels_factories[channel_id]
                 factory.must_ignore(message)
                 path = factory.get_path(message)
                 if path and not factory.must_ignore(message):
-                    await download.download_file(client, message, path)
+                    if config["Telegram"]["APP_DEBUG"] != "true":
+                        logger.info(f"Canal: {peer_channel.channel_id} Mensaje: {message.media.document.id}")
+                        await download.download_file(client, message, path)
 
 
 def is_media_message(message):

@@ -10,12 +10,13 @@ config = configparser.ConfigParser()
 config.read("config.ini")
 
 
+def make_directory(abs_path: Path):
+    abs_path.parent.mkdir(parents=True, exist_ok=True)
+
+
 class Download(MetadataDownload):
     def __init__(self):
         self.file = ""
-
-    def make_directory(self, abs_path: Path):
-        abs_path.parent.mkdir(parents=True, exist_ok=True)
 
     def progress(self, current, total):
         current_m = bytes_to(current, "m")
@@ -28,11 +29,11 @@ class Download(MetadataDownload):
         if not self.already_downloaded(message):
             path = abs_path
             if path:
+                make_directory(abs_path)
                 with open(path, "wb") as out:
-                    if config["Telegram"]["APP_DEBUG"] != "true":
-                        self.start_download(message)
-                        self.file = path
-                        logger.info("Inicio de descarga de archivo")
-                        await client.download_media(message.media.document, out, progress_callback=self.progress)
-                        logger.info("Finalización de descarga de archivo")
+                    self.start_download(message)
+                    self.file = path
+                    logger.info(f"Inicio de descarga de archivo: {abs_path}")
+                    await client.download_media(message.media.document, out, progress_callback=self.progress)
+                    logger.info(f"Finalización de descarga de archivo: {abs_path}")
                     self.download_finished(message)

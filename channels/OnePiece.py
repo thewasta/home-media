@@ -19,12 +19,13 @@ class OnePiece(ChannelFactory):
         return "3D" in message.message or "Película" in message.message
 
     def get_path(self, message: Message):
-        file_type = FileMimeType.get_mime(message.media.document.mime_type)
-        main_folder_path = PurePath(str(config['Telegram']['PATH']), self.parent, "TV", self.show)
-        if "Cap" in message.message:
-            chapter = message.message.split(" ")[0]
-            chapter = chapter.replace("#", "")
-            chapter = chapter.replace("Cap", "")
-            file_name = f"One Piece S01E{chapter}.{file_type}"
-            abs_path = Path(PurePath(main_folder_path, file_name))
-            return Path(abs_path)
+        if self.must_ignore(message):
+            file_type = FileMimeType.get_mime(message.media.document.mime_type)
+            main_folder_path = PurePath(str(config['Telegram']['PATH']), self.parent, "TV", self.show)
+            if "Cap" in message.message:
+                chapter = message.message.split(" ")[0]
+                chapter = chapter.replace("#", "")
+                chapter = chapter.replace("Cap", "")
+                file_name = f"One Piece S01E{chapter}.{file_type}"
+                abs_path = Path(PurePath(main_folder_path, file_name))
+                return Path(abs_path)

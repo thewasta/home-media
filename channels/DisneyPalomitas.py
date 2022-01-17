@@ -31,21 +31,22 @@ class DisneyPalomitas(ChannelFactory):
             return True
 
     def get_path(self, message: Message):
-        message_file_name = message.media.document.attributes[0].file_name
-        file_type = FileMimeType.get_mime(message.media.document.mime_type)
-        show_name_search = re.search("(\d{1,2}x\d{1,2})", message_file_name)
-        if show_name_search:
-            show_name_search = show_name_search.group()
-            show_name_remove_chapter = message_file_name.replace(show_name_search, "")
-            self.show = re.sub("\@.*", "", show_name_remove_chapter).strip()
-            self.show = re.sub("[^a-zA-Z0-9,\s]", "", self.show)
-            self.__rename_show()
-            main_folder_path = PurePath(str(config['Telegram']['PATH']), self.parent, self.show)
-            season = re.findall("\d{1,2}", message_file_name)[0]
-            chapter = re.findall("\d{1,2}", message_file_name)[1]
-            file_name = f"{self.show} S{season}E{chapter}.{file_type}"
-            abs_path = Path(PurePath(main_folder_path, file_name))
-            return Path(abs_path)
+        if not self.must_ignore(message):
+            message_file_name = message.media.document.attributes[0].file_name
+            file_type = FileMimeType.get_mime(message.media.document.mime_type)
+            show_name_search = re.search("(\d{1,2}x\d{1,2})", message_file_name)
+            if show_name_search:
+                show_name_search = show_name_search.group()
+                show_name_remove_chapter = message_file_name.replace(show_name_search, "")
+                self.show = re.sub("\@.*", "", show_name_remove_chapter).strip()
+                self.show = re.sub("[^a-zA-Z0-9,\s]", "", self.show)
+                self.__rename_show()
+                main_folder_path = PurePath(str(config['Telegram']['PATH']), self.parent, self.show)
+                season = re.findall("\d{1,2}", message_file_name)[0]
+                chapter = re.findall("\d{1,2}", message_file_name)[1]
+                file_name = f"{self.show} S{season}E{chapter}.{file_type}"
+                abs_path = Path(PurePath(main_folder_path, file_name))
+                return Path(abs_path)
 
     def __rename_show(self):
         if "Hawaii" in self.show:
