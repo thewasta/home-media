@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.8
 import asyncio
 import configparser
+import re
 from pathlib import Path
 
 import psutil
@@ -10,6 +11,7 @@ from telethon.tl.types import PeerChannel
 from channels.ChannelFatory import ChannelFactory
 from channels.DisneyPalomitas import DisneyPalomitas
 from channels.OnePiece import OnePiece
+from channels.Shingeki import Shingeki
 from channels.YoungSheldon import YoungSheldon
 from utils import bytes_to
 from utils.Download import Download
