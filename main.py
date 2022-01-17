@@ -80,7 +80,6 @@ async def main():
             await file_system_notification()
             if is_media_message(message):
                 factory: ChannelFactory = channels_factories[channel_id]
-                factory.must_ignore(message)
                 path = factory.get_path(message)
                 if path and not factory.must_ignore(message):
                     if config["Telegram"]["APP_DEBUG"] != "true":

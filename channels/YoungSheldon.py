@@ -21,7 +21,7 @@ class YoungSheldon(ChannelFactory):
         """"""
 
     def get_path(self, message: Message):
-        if self.must_ignore(message):
+        if not self.must_ignore(message):
             dialog_message = message.message
             file_type = FileMimeType.get_mime(message.media.document.mime_type)
             main_folder_path = PurePath(str(config['Telegram']['PATH']), self.parent, self.show)
