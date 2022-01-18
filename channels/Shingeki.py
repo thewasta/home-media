@@ -4,7 +4,7 @@ from pathlib import Path, PurePath
 
 from telethon.tl.custom import Message
 
-from channels.ChannelFatory import ChannelFactory
+from channels.ChannelFactory import ChannelFactory
 from utils.FileMimeType import FileMimeType
 
 config = configparser.ConfigParser()
@@ -15,7 +15,6 @@ class Shingeki(ChannelFactory):
     def __init__(self):
         self.show = "Shingeki No Kyojin"
         self.parent = "Anime"
-        self.file = ""
 
     def must_ignore(self, message: Message) -> bool:
         pass
