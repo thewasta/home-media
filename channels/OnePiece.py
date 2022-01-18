@@ -3,7 +3,7 @@ from pathlib import Path, PurePath
 
 from telethon.tl.custom.message import Message
 
-from channels.ChannelFatory import ChannelFactory
+from channels.ChannelFactory import ChannelFactory
 from utils.FileMimeType import FileMimeType
 
 config = configparser.ConfigParser()

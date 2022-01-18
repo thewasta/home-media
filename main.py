@@ -8,11 +8,7 @@ import psutil
 from telethon.sync import TelegramClient
 from telethon.tl.types import PeerChannel
 
-from channels.ChannelFatory import ChannelFactory
-from channels.DisneyPalomitas import DisneyPalomitas
-from channels.OnePiece import OnePiece
-from channels.Shingeki import Shingeki
-from channels.YoungSheldon import YoungSheldon
+from channels import SouthPark, Shingeki, OnePiece, DisneyPalomitas, YoungSheldon, ChannelFactory
 from utils import bytes_to
 from utils.Download import Download
 from utils.Logger import setup_logger
