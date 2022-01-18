@@ -1,10 +1,13 @@
+import configparser
+import os
 from pathlib import Path
+
+from telethon import TelegramClient
+from telethon.tl.custom.message import Message
+
 from utils import bytes_to
 from utils import logger
 from utils.MetadataDownload import MetadataDownload
-from telethon import TelegramClient
-from telethon.tl.custom.message import Message
-import configparser
 
 config = configparser.ConfigParser()
 config.read("config.ini")
@@ -27,13 +30,18 @@ class Download(MetadataDownload):
 
     async def download_file(self, client: TelegramClient, message: Message, abs_path=None):
         if not self.already_downloaded(message):
-            path = abs_path
-            if path:
+            if abs_path:
                 make_directory(abs_path)
-                with open(path, "wb") as out:
+                try:
+                    offset = os.path.getsize(abs_path)
+                except OSError:
+                    offset = 0
+                with open(abs_path, "ab") as out:
                     self.start_download(message)
-                    self.file = path
+                    self.file = abs_path
                     logger.info(f"Inicio de descarga de archivo: {abs_path}")
-                    await client.download_media(message.media.document, out, progress_callback=self.progress)
-                    logger.info(f"Finalización de descarga de archivo: {abs_path}")
+                    async for chunk in client.iter_download(message.media, offset=offset):
+                        offset += chunk.nbytes
+                        out.write(chunk)
+                        self.progress(offset, message.media.document.size)
                     self.download_finished(message)
