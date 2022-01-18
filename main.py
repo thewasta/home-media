@@ -30,6 +30,7 @@ channels_factories = {
     config["Channels"]["disney_palomitas"]: DisneyPalomitas(),
     config["Channels"]["zuby_palomitas"]: DisneyPalomitas(),
     config["Channels"]["shingeki"]: Shingeki(),
+    config["Channels"]["south_park"]: SouthPark(),
 }
 
 
