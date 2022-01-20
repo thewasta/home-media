@@ -23,21 +23,29 @@ class Shingeki(ChannelFactory):
         if not self.must_ignore(message):
             file_type = FileMimeType.get_mime(message.media.document.mime_type)
             main_folder_path = PurePath(str(config['Telegram']['PATH']), self.parent, "TV", self.show)
-            season = message.message.split(" ")[0].replace("T", "S0")
-            chapter = re.search("(?<=ulo)(.*)(\d){1,2}", message.message).group().replace(" ", "")
-            if "parte" in message.message:
-                episode = 75 + int(chapter)
-                file_name = f"{self.show} episode {episode}.{file_type}"
-            elif "4" in season and "parte" not in message.message:
-                episode = 59 + int(chapter)
-                file_name = f"{self.show} episode {episode}.{file_type}"
-            elif "3" in season:
-                episode = 37 + int(chapter)
-                file_name = f"{self.show} episode {episode}.{file_type}"
-            elif "2" in season:
-                episode = 26 + int(chapter)
-                file_name = f"{self.show} episode {episode}.{file_type}"
-            else:
+            if "OVA" not in message.message:
+                is_part = re.search("part", message.message, flags=re.IGNORECASE)
+                chapter = 0
+                if "The Final Season" in message.message and not is_part:
+                    chapter = re.search("(?<=sodio)(.*)(\d){1,2}", message.message).group().replace(" ", "")
+                    chapter = 59 + int(chapter)
+                if is_part and "The Final Season" in message.message:
+                    chapter = re.search("(?<=sodio)(.*)(\d){1,2}", message.message).group().replace(" ", "")
+                    chapter = int(chapter) + 75
+                if "#" in message.message:
+                    chapter = re.search("(?<=#)(.*)(\d){1,2}", message.message).group().replace("Episode_", "")
                 file_name = f"{self.show} episode {chapter}.{file_type}"
-            abs_path = Path(PurePath(main_folder_path, file_name))
-            return Path(abs_path)
+                abs_path = Path(PurePath(main_folder_path, file_name))
+                return Path(abs_path)
+            else:
+                main_folder_path = PurePath(str(config['Telegram']['PATH']), self.parent, "Movies", self.show)
+                regrex_pattern = re.compile(pattern="["
+                                                    u"\U0001F600-\U0001F64F"  # emoticons
+                                                    u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+                                                    u"\U0001F680-\U0001F6FF"  # transport & map symbols
+                                                    u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+                                                    "]+", flags=re.UNICODE)
+                remove_emoji = regrex_pattern.sub(r'', re.match("[\s\S]*?(?=_)", message.message).group())
+                file_name = f'{remove_emoji}.{file_type}'
+
+                abs_path = Path(PurePath(main_folder_path, file_name))
