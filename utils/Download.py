@@ -41,7 +41,8 @@ class Download(MetadataDownload):
                     self.file = abs_path
                     logger.info(f"Inicio de descarga de archivo: {abs_path}")
                     async for chunk in client.iter_download(message.media, offset=offset):
-                        offset += chunk.nbytes
+                        if hasattr(chunk, "nbytes"):
+                            offset += chunk.nbytes
                         out.write(chunk)
                         self.progress(offset, message.media.document.size)
                     self.download_finished(message)
