@@ -26,7 +26,7 @@ class Download(MetadataDownload):
         total_b = bytes_to(total, "m")
         path = "/".join(str(self.file).split("/")[-3:])
         logger.info("Download total: {}% {} mb/{} mb {}"
-                    .format(int((current / total) * 100), current_m, total_b, path))
+                    .format(format(float((current / total) * 100), ".2f"), current_m, total_b, path))
 
     async def download_file(self, client: TelegramClient, message: Message, abs_path=None):
         if not self.already_downloaded(message):
@@ -41,8 +41,7 @@ class Download(MetadataDownload):
                     self.file = abs_path
                     logger.info(f"Inicio de descarga de archivo: {abs_path}")
                     async for chunk in client.iter_download(message.media, offset=offset):
-                        if hasattr(chunk, "nbytes"):
-                            offset += chunk.nbytes
+                        offset += len(chunk)
                         out.write(chunk)
                         self.progress(offset, message.media.document.size)
                     self.download_finished(message)
