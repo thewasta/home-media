@@ -8,7 +8,8 @@ import psutil
 from telethon.sync import TelegramClient
 from telethon.tl.types import PeerChannel
 
-from channels import SouthPark, Shingeki, OnePiece, DisneyPalomitas, YoungSheldon, ChannelFactory
+from channels import SouthPark, Shingeki, OnePiece, DisneyPalomitas
+from channels import YoungSheldon, ChannelFactory, KimetsuNoYaiba
 from utils import bytes_to
 from utils.Download import Download
 from utils.Logger import setup_logger
@@ -31,6 +32,7 @@ channels_factories = {
     config["Channels"]["zuby_palomitas"]: DisneyPalomitas(),
     config["Channels"]["shingeki"]: Shingeki(),
     config["Channels"]["south_park"]: SouthPark(),
+    config["Channels"]["kimetsu_yaiba"]: KimetsuNoYaiba(),
 }
 
 
