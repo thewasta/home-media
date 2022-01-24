@@ -36,7 +36,6 @@ class Shingeki(ChannelFactory):
                     chapter = re.search("(?<=#)(.*)(\d){1,2}", message.message).group().replace("Episode_", "")
                 file_name = f"{self.show} episode {chapter}.{file_type}"
                 abs_path = Path(PurePath(main_folder_path, file_name))
-                return Path(abs_path)
             else:
                 main_folder_path = PurePath(str(config['Telegram']['PATH']), self.parent, "Movies", self.show)
                 regrex_pattern = re.compile(pattern="["
@@ -49,3 +48,4 @@ class Shingeki(ChannelFactory):
                 file_name = f'{remove_emoji}.{file_type}'
 
                 abs_path = Path(PurePath(main_folder_path, file_name))
+            return Path(abs_path)
