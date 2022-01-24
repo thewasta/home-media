@@ -45,6 +45,7 @@ class KimetsuNoYaiba(ChannelFactory):
                 chapter = re.search("\d{1,2}", message.message).group()
                 quality = self.get_video_quality(message)
                 if re.search("Yuukaku", remove_hashtag, flags=re.IGNORECASE):
+                    chapter = re.search("(?<=ulo).*(\d){1,2}\s", remove_hashtag, flags=re.IGNORECASE).group().strip()
                     season = 3
                 elif re.search("Mugen", message.message, flags=re.IGNORECASE):
                     season = 2
@@ -54,7 +55,8 @@ class KimetsuNoYaiba(ChannelFactory):
             else:
                 main_folder_path = PurePath(str(config['Telegram']['PATH']), self.parent, "Movies", self.show)
                 file_name = f"{self.show} Mugen Ressha Hen [tvdbid=131963].{file_type}"
-            return Path(PurePath(main_folder_path, file_name))
+            print(file_name)
+            # return Path(PurePath(main_folder_path, file_name))
 
     # noinspection PyMethodMayBeStatic
     def remove_hashtag(self, message: Message):
