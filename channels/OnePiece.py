@@ -17,7 +17,7 @@ class OnePiece(ChannelFactory):
         self.file = ""
 
     def must_ignore(self, message) -> bool:
-        return "3D" in message.message or "Película" in message.message
+        return "3D" in message.message
 
     def get_path(self, message: Message):
         if not self.must_ignore(message):
