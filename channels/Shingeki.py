@@ -34,7 +34,7 @@ class Shingeki(ChannelFactory):
                     chapter = int(chapter) + 75
                 if "#" in message.message:
                     chapter = re.search("(?<=#)(.*)(\d){1,2}", message.message).group().replace("Episode_", "")
-                file_name = f"{self.show} episode {chapter}.{file_type}"
+                file_name = f"{self.show} episode {chapter}.{file_type}".replace("\n", "")
                 abs_path = Path(PurePath(main_folder_path, file_name))
             else:
                 main_folder_path = PurePath(str(config['Telegram']['PATH']), self.parent, "Movies", self.show)
