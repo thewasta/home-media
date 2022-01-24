@@ -44,8 +44,8 @@ class Shingeki(ChannelFactory):
                                                     u"\U0001F680-\U0001F6FF"  # transport & map symbols
                                                     u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
                                                     "]+", flags=re.UNICODE)
-                remove_emoji = regrex_pattern.sub(r'', re.match("[\s\S]*?(?=_)", message.message).group())
-                file_name = f'{remove_emoji}.{file_type}'.replace("\n", "").strip()
+                remove_emoji = regrex_pattern.sub(r'', re.match("[\s\S]*?(?=_)", message.message).group()).strip()
+                file_name = f'{remove_emoji}.{file_type}'.replace("\n", "")
 
                 abs_path = Path(PurePath(main_folder_path, file_name))
             return Path(abs_path)
