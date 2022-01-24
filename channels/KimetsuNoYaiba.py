@@ -55,8 +55,7 @@ class KimetsuNoYaiba(ChannelFactory):
             else:
                 main_folder_path = PurePath(str(config['Telegram']['PATH']), self.parent, "Movies", self.show)
                 file_name = f"{self.show} Mugen Ressha Hen [tvdbid=131963].{file_type}"
-            print(file_name)
-            # return Path(PurePath(main_folder_path, file_name))
+            return Path(PurePath(main_folder_path, file_name))
 
     # noinspection PyMethodMayBeStatic
     def remove_hashtag(self, message: Message):
