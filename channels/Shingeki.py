@@ -34,7 +34,7 @@ class Shingeki(ChannelFactory):
                     chapter = int(chapter) + 75
                 if "#" in message.message:
                     chapter = re.search("(?<=#)(.*)(\d){1,2}", message.message).group().replace("Episode_", "")
-                file_name = f"{self.show} episode {chapter}.{file_type}".replace("\n", "").strip()
+                file_name = f"{self.show} episode {chapter}.{file_type}"
                 abs_path = Path(PurePath(main_folder_path, file_name))
             else:
                 main_folder_path = PurePath(str(config['Telegram']['PATH']), self.parent, "Movies", self.show)
@@ -45,7 +45,7 @@ class Shingeki(ChannelFactory):
                                                     u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
                                                     "]+", flags=re.UNICODE)
                 remove_emoji = regrex_pattern.sub(r'', re.match("[\s\S]*?(?=_)", message.message).group())
-                file_name = f'{remove_emoji}.{file_type}'
+                file_name = f'{remove_emoji}.{file_type}'.replace("\n", "").strip()
 
                 abs_path = Path(PurePath(main_folder_path, file_name))
             return Path(abs_path)
