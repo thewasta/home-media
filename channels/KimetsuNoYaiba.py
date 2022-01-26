@@ -41,6 +41,7 @@ class KimetsuNoYaiba(ChannelFactory):
             main_folder_path = PurePath(str(config['Telegram']['PATH']), self.parent, "TV", self.show)
 
             remove_hashtag = self.remove_hashtag(message)
+            season = 3
             if re.search("movie", message.message, flags=re.IGNORECASE) is None:
                 chapter = re.search("\d{1,2}", message.message).group()
                 quality = self.get_video_quality(message)
