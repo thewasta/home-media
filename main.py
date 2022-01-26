@@ -96,7 +96,7 @@ async def main():
 
 def is_media_message(message):
     media = message.media
-    return media and not hasattr(media, 'photo') and not hasattr(media, "webpage")
+    return media and not hasattr(media, 'photo') and not hasattr(media, "webpage") and not hasattr(media, 'poll')
 
 
 if __name__ == "__main__":
