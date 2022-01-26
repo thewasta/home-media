@@ -46,7 +46,7 @@ class DisneyPalomitas(ChannelFactory):
                 season = re.findall("\d{1,2}", message_file_name)[0]
                 chapter = re.findall("\d{1,2}", message_file_name)[1]
                 file_name = f"{self.show} S{season}E{chapter}.{file_type}"
-                abs_path = Path(PurePath(main_folder_path, file_name))
+                abs_path = Path(PurePath(main_folder_path, f"Season {season}", file_name))
                 return Path(abs_path)
 
     def __rename_show(self):
