@@ -7,8 +7,8 @@ from pathlib import Path
 import psutil
 from telethon.sync import TelegramClient, events
 from telethon.tl.types import PeerChannel
-from datetime import date
-from channels import SouthPark, Shingeki, OnePiece, DisneyPalomitas
+
+from channels import SouthPark, Shingeki, OnePiece
 from channels import YoungSheldon, ChannelFactory, KimetsuNoYaiba
 from utils import bytes_to
 from utils.Download import Download
@@ -79,13 +79,14 @@ async def main():
     download = Download()
     for channel, channel_id in channels_videos.items():
         peer_channel = PeerChannel(channel_id=int(channel_id))
-        async for message in client.iter_messages(entity=peer_channel, offset_date=date.today()):
+        async for message in client.iter_messages(entity=peer_channel, limit=10):
             disk_full()
             await file_system_notification()
             if is_media_message(message):
                 factory: ChannelFactory = channels_factories[channel_id]
                 path = factory.get_path(message)
                 if path and not factory.must_ignore(message):
+                    print(path)
                     if config["Telegram"]["APP_DEBUG"] != "true":
                         logger.info(f"Canal: {peer_channel.channel_id} Mensaje: {message.media.document.id}")
                         await download.download_file(client, message, path)
