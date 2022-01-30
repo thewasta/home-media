@@ -86,7 +86,6 @@ async def main():
                 factory: ChannelFactory = channels_factories[channel_id]
                 path = factory.get_path(message)
                 if path and not factory.must_ignore(message):
-                    print(path)
                     if config["Telegram"]["APP_DEBUG"] != "true":
                         logger.info(f"Canal: {peer_channel.channel_id} Mensaje: {message.media.document.id}")
                         await download.download_file(client, message, path)
