@@ -5,9 +5,9 @@ import re
 from pathlib import Path
 
 import psutil
-from telethon.sync import TelegramClient
+from telethon.sync import TelegramClient, events
 from telethon.tl.types import PeerChannel
-
+from datetime import date
 from channels import SouthPark, Shingeki, OnePiece, DisneyPalomitas
 from channels import YoungSheldon, ChannelFactory, KimetsuNoYaiba
 from utils import bytes_to
@@ -28,8 +28,8 @@ logger = setup_logger("main")
 channels_factories = {
     config["Channels"]["one_piece"]: OnePiece(),
     config["Channels"]["young_sheldon"]: YoungSheldon(),
-    config["Channels"]["disney_palomitas"]: DisneyPalomitas(),
-    config["Channels"]["zuby_palomitas"]: DisneyPalomitas(),
+    # config["Channels"]["disney_palomitas"]: DisneyPalomitas(),
+    # config["Channels"]["zuby_palomitas"]: DisneyPalomitas(),
     config["Channels"]["shingeki"]: Shingeki(),
     config["Channels"]["south_park"]: SouthPark(),
     config["Channels"]["kimetsu_yaiba"]: KimetsuNoYaiba(),
@@ -74,15 +74,12 @@ async def file_system_notification() -> bool:
     return result
 
 
+# region Main
 async def main():
     download = Download()
     for channel, channel_id in channels_videos.items():
         peer_channel = PeerChannel(channel_id=int(channel_id))
-        # todo REMOVE LIMIT WHEN READY TO PRODUCTION
-        """
-        :param message Message
-        """
-        async for message in client.iter_messages(entity=peer_channel):
+        async for message in client.iter_messages(entity=peer_channel, offset_date=date.today()):
             disk_full()
             await file_system_notification()
             if is_media_message(message):
@@ -94,6 +91,23 @@ async def main():
                         await download.download_file(client, message, path)
 
 
+# endregion
+
+
+@client.on(events.NewMessage())
+async def new_message(event):
+    download = Download()
+    chat = await event.get_chat()
+    if "-100" + str(chat.id) in channels_factories:
+        message = event.message
+        if is_media_message(message):
+            factory: ChannelFactory = channels_factories["-100" + str(chat.id)]
+            path = factory.get_path(message)
+            if config["Telegram"]["APP_DEBUG"] != "true":
+                logger.info(f"Canal: {chat.id} Mensaje: {message.media.document.id}")
+                await download.download_file(client, message, path)
+
+
 def is_media_message(message):
     media = message.media
     return media and not hasattr(media, 'photo') and not hasattr(media, "webpage") and not hasattr(media, 'poll')
@@ -102,3 +116,4 @@ def is_media_message(message):
 if __name__ == "__main__":
     client.start()
     loop.run_until_complete(main())
+    client.run_until_disconnected()
