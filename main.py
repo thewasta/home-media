@@ -10,7 +10,7 @@ from telethon.tl.types import PeerChannel
 
 from channels import SouthPark, Shingeki, OnePiece
 from channels import YoungSheldon, ChannelFactory, KimetsuNoYaiba
-from channels import Boruto
+from channels import Boruto, JujutsuKaisen
 from utils import bytes_to
 from utils.Download import Download
 from utils.Logger import setup_logger
@@ -32,7 +32,8 @@ channels_factories = {
     config["Channels"]["shingeki"]: Shingeki(),
     config["Channels"]["south_park"]: SouthPark(),
     config["Channels"]["kimetsu_yaiba"]: KimetsuNoYaiba(),
-    config["Channels"]["boruto"]: Boruto()
+    config["Channels"]["boruto"]: Boruto(),
+    config["Channels"]["jujutsu_kaisen"]: JujutsuKaisen()
 }
 
 
@@ -81,7 +82,7 @@ async def main():
     for channel, channel_id in channels_videos.items():
         peer_channel = PeerChannel(channel_id=int(channel_id))
         limit = 10
-        if config["Channels"]["Boruto"] in channel_id:
+        if config["Channels"]["boruto"] in channel_id or config["Channels"]["jujutsu_kaisen"] in channel_id:
             limit = None
         async for message in client.iter_messages(entity=peer_channel, limit=limit):
             disk_full()
