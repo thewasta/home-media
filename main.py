@@ -10,6 +10,7 @@ from telethon.tl.types import PeerChannel
 
 from channels import SouthPark, Shingeki, OnePiece
 from channels import YoungSheldon, ChannelFactory, KimetsuNoYaiba
+from channels import Boruto
 from utils import bytes_to
 from utils.Download import Download
 from utils.Logger import setup_logger
@@ -28,11 +29,10 @@ logger = setup_logger("main")
 channels_factories = {
     config["Channels"]["one_piece"]: OnePiece(),
     config["Channels"]["young_sheldon"]: YoungSheldon(),
-    # config["Channels"]["disney_palomitas"]: DisneyPalomitas(),
-    # config["Channels"]["zuby_palomitas"]: DisneyPalomitas(),
     config["Channels"]["shingeki"]: Shingeki(),
     config["Channels"]["south_park"]: SouthPark(),
     config["Channels"]["kimetsu_yaiba"]: KimetsuNoYaiba(),
+    config["Channels"]["boruto"]: Boruto()
 }
 
 
@@ -50,6 +50,7 @@ async def get_dialogs():
         })
     with open("storage/data.json", "w") as file:
         json.dump(chats, file)
+    exit()
 
 
 def disk_full():
@@ -79,7 +80,10 @@ async def main():
     download = Download()
     for channel, channel_id in channels_videos.items():
         peer_channel = PeerChannel(channel_id=int(channel_id))
-        async for message in client.iter_messages(entity=peer_channel, limit=10):
+        limit = 10
+        if config["Channels"]["Boruto"] in channel_id:
+            limit = None
+        async for message in client.iter_messages(entity=peer_channel, limit=limit):
             disk_full()
             await file_system_notification()
             if is_media_message(message):
@@ -87,10 +91,7 @@ async def main():
                 path = factory.get_path(message)
                 if path and not factory.must_ignore(message):
                     if config["Telegram"]["APP_DEBUG"] != "true":
-                        logger.info(f"Canal: {peer_channel.channel_id} Mensaje: {message.media.document.id}")
                         await download.download_file(client, message, path)
-
-
 # endregion
 
 

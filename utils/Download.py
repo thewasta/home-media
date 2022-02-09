@@ -30,6 +30,7 @@ class Download(MetadataDownload):
 
     async def download_file(self, client: TelegramClient, message: Message, abs_path=None):
         if not self.already_downloaded(message):
+            logger.info(f"Canal: {message.chat_id} Mensaje: {message.media.document.id}")
             if abs_path:
                 make_directory(abs_path)
                 try:

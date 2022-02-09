@@ -14,7 +14,6 @@ class OnePiece(ChannelFactory):
     def __init__(self):
         self.show = "One Piece"
         self.parent = "Anime"
-        self.file = ""
 
     def must_ignore(self, message) -> bool:
         return "3D" in message.message
