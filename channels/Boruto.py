@@ -13,7 +13,7 @@ config.read("config.ini")
 
 class Boruto(ChannelFactory):
     def __init__(self):
-        self.show = "Boruto: Naruto Next Generation"
+        self.show = "Boruto Naruto Next Generation"
         self.parent = "Anime"
 
     def must_ignore(self, message: Message) -> bool:
