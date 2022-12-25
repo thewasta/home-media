@@ -26,6 +26,6 @@ class OnePiece(ChannelFactory):
                 chapter = message.message.split(" ")[0]
                 chapter = chapter.replace("#", "")
                 chapter = chapter.replace("Cap", "")
-                file_name = f"{self.show} episode {chapter}.{file_type}"
+                file_name = f"{self.show} S01E{chapter}.{file_type}"
                 abs_path = Path(PurePath(main_folder_path, file_name))
                 return Path(abs_path)
