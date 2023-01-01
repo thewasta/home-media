@@ -28,10 +28,10 @@ class CineCastellano(ChannelFactory):
         file_name = re.sub("\n(?<=\n)[^\]]+", "", remove_special_characters)
 
         if message.entities[0].url:
-            media_url = message.entities[0].url
+            media_url = re.search("tt\d.+?(?=\/)", message.entities[0].url)
         mdb_id = None
         if media_url:
-            mdb_id = re.search("tt\d.+?(?=\/)", media_url).group()
+            mdb_id = media_url.group()
         if mdb_id:
             file_name = f"{file_name} [{mdb_id}]"
         main_folder_path = PurePath(str(config['Telegram']['PATH']), self.parent)

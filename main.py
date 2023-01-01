@@ -94,7 +94,6 @@ async def main():
                 factory: ChannelFactory = channels_factories[channel_id]
                 path = factory.get_path(message)
                 if path and not factory.must_ignore(message):
-                    print(message)
                     if config["Telegram"]["APP_DEBUG"] != "true":
                         await download.download_file(client, message, path)
 # endregion
