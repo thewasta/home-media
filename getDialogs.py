@@ -7,7 +7,7 @@ config.read('config.ini')
 
 
 def get_chats():
-    client = TelegramClient('dialog-session', int(config['Telegram']['API_TOKEN']), str(config['Telegram']['API_HASH']))
+    client = TelegramClient('session', int(config['Telegram']['API_TOKEN']), str(config['Telegram']['API_HASH']))
 
     client.start()
 
@@ -22,7 +22,7 @@ def get_chats():
     return chats
 
 
-def get_chat_id(chat_name):
+def get_chat_id():
     client = TelegramClient('session', int(config['Telegram']['API_TOKEN']), str(config['Telegram']['API_HASH']))
 
     client.start()
@@ -33,4 +33,4 @@ def get_chat_id(chat_name):
     return chat_id
 
 
-print(get_chat_id(""))
+print(get_chats())
