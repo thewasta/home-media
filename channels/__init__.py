@@ -7,4 +7,5 @@ from channels.SouthPark import SouthPark
 from channels.YoungSheldon import YoungSheldon
 from channels.KimetsuNoYaiba import KimetsuNoYaiba
 from channels.CineCastellano import CineCastellano
+from channels.Friends import Friends
 from channels.ChannelFactory import ChannelFactory

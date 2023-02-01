@@ -11,6 +11,7 @@ from telethon.tl.types import PeerChannel
 from channels import SouthPark, Shingeki, OnePiece
 from channels import YoungSheldon, ChannelFactory, KimetsuNoYaiba
 from channels import Boruto, JujutsuKaisen, CineCastellano
+from channels import Friends
 from utils import bytes_to
 from utils.Download import Download
 from utils.Logger import setup_logger
@@ -34,7 +35,8 @@ channels_factories = {
     # config["Channels"]["kimetsu_yaiba"]: KimetsuNoYaiba(),
     config["Channels"]["boruto"]: Boruto(),
     # config["Channels"]["jujutsu_kaisen"]: JujutsuKaisen(),
-    config["Channels"]["cine_para_todos"]: CineCastellano()
+    config["Channels"]["cine_para_todos"]: CineCastellano(),
+    config["Channels"]["friends"]: Friends()
 }
 
 
@@ -87,6 +89,8 @@ async def main():
             limit = None
         if config["Channels"]["boruto"] in channel_id:
             limit = 20
+        if config["Channels"]["friends"] in channel_id:
+            limit = None
         async for message in client.iter_messages(entity=peer_channel, limit=limit):
             disk_full()
             await file_system_notification()
