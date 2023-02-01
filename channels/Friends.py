@@ -20,8 +20,7 @@ class Friends(ChannelFactory):
     def must_ignore(self, message: Message) -> bool:
         file_name = message.media.document.attributes[0].file_name
         season = re.search("S\d{2}", file_name).group()
-        if "S05" in season:
-            print("false", season)
+        if "S05" in season or "S03" in season:
             return True
         pass
 
